@@ -163,16 +163,62 @@
 
 //lifetimess
 
-fn longest(a: &str, b: &str) -> &str {
-    if a.len() > b.len(){
-        return a;
-    } else {
-        return b;
-    }
-}
-fn main(){
-    let str1 = String::from("aaaa");
-    let str2 = String::from("bbbbbbbbb");
+// fn longest(a: &str, b: &str) -> &str {
+//     if a.len() > b.len(){
+//         return a;
+//     } else {
+//         return b;
+//     }
+// }
+// fn main(){
+//     let str1 = String::from("aaaa");
+//     let str2 = String::from("bbbbbbbbb");
 
-    longest(&str1, &str2);
+//     longest(&str1, &str2);
+// }
+
+
+
+//serialization and deserialzation using serde
+
+//Serialization: Convert a Rust struct into a JSON string.
+//Deserialization: Convert a JSON string back into a Rust struct.
+
+
+use serde::{Serialize, Deserialize};
+use serde_json;
+
+// Define a struct that will be serialized and deserialized
+#[derive(Serialize, Deserialize, Debug)]
+struct Person {
+    name: String,
+    age: u8,
+    email: String,
+}
+
+// Function to serialize a struct to JSON
+fn serialize(person: &Person) -> String {
+    serde_json::to_string(person).expect("Failed to serialize")
+}
+
+// Function to deserialize a JSON string to a struct
+fn deserialize(json_data: &str) -> Person {
+    serde_json::from_str(json_data).expect("Failed to deserialize")
+}
+
+fn main() {
+    // Create an instance of the Person struct
+    let person = Person {
+        name: String::from("Alice"),
+        age: 30,
+        email: String::from("alice@example.com"),
+    };
+
+    // Serialize the person struct to JSON
+    let serialized_person = serialize(&person);
+    println!("Serialized: {}", serialized_person);
+
+    // Deserialize the JSON string back to a Person struct
+    let deserialized_person: Person = deserialize(&serialized_person);
+    println!("Deserialized: {:?}", deserialized_person);
 }
